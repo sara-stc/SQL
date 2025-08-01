@@ -76,8 +76,26 @@ HAVING total_industry_revenue>=1500
 ORDER BY SUM(revenue) DESC 
 LIMIT 3
 ;
---- Query #3  ---
-
---- Query #4  ---
-
---- Query #5  ---
+--- Query #3 To which degree are these Fortune500 companies supportive in terms of maternity leave duration? ---
+SELECT company_name, maternity_leave_weeks,
+CASE WHEN maternity_leave_weeks>=16 THEN 'WHO recommendation compliant'
+WHEN maternity_leave_weeks>12 THEN 'satisfactory'
+WHEN maternity_leave_weeks=12 THEN 'good'
+ELSE 'unsatisfactory'
+END AS maternity_leave_fairness
+FROM fortune_companies
+ORDER BY maternity_leave_weeks
+;
+--- Query #4  Which non-tech companies are not offering healthcare benefits? ---
+SELECT company_name, industry, healthcare_benefits
+FROM fortune_companies
+WHERE healthcare_benefits=0
+AND industry NOT IN('Technology','Telecommunications')
+ORDER BY industry
+;
+--- Query #5  Using the LinkedIn size classification as reference, which "Code G" retail company has the highest revenue? ---
+SELECT company_name, employees, MAX(revenue)
+FROM fortune_companies
+WHERE employees BETWEEN 1000 AND 5000
+AND industry='Retail'
+;
